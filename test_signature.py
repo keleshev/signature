@@ -25,21 +25,12 @@ def test_keyword_parameters_vs_positional_arguments():
     s = Signature(('year', 1970), ('month', 1), ('day', 1))
 
     s << [2013, 1, 15]
-    assert s.year  == s[0] == 2013
-    assert s.month == s[1] == 1
-    assert s.day   == s[2] == 15
     assert list(s) == [2013, 1, 15]
 
     s << [2013]
-    assert s.year  == s[0] == 2013
-    assert s.month == s[1] == 1
-    assert s.day   == s[2] == 1
     assert list(s) == [2013, 1, 1]
 
     s << []
-    assert s.year  == s[0] == 1970
-    assert s.month == s[1] == 1
-    assert s.day   == s[2] == 1
     assert list(s) == [1970, 1, 1]
 
     with raises(SignatureError):
@@ -51,15 +42,9 @@ def test_mixed_parameters_vs_positional_arguments():
     s = Signature('year', ('month', 1), ('day', 1))
 
     s << [2013, 1, 15]
-    assert s.year  == s[0] == 2013
-    assert s.month == s[1] == 1
-    assert s.day   == s[2] == 15
     assert list(s) == [2013, 1, 15]
 
     s << [2013]
-    assert s.year  == s[0] == 2013
-    assert s.month == s[1] == 1
-    assert s.day   == s[2] == 1
     assert list(s) == [2013, 1, 1]
 
     with raises(SignatureError):
