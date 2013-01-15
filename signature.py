@@ -19,10 +19,6 @@ class Param(object):
             return 'Param(%r)' % self.name
         return 'Param(%r, %r)' % (self.name, self.default)
 
-    @property
-    def is_required(self):
-        return self.default is Nothing
-
 
 class Signature(object):
 
@@ -40,7 +36,7 @@ class Signature(object):
         self.__dict__ = {'_params': self._params}  # reset __dict__
         if len(other) > len(self._params):
             raise SignatureError()  # TODO better error reporting
-        if len(other) < len([p for p in self._params if p.is_required]):
+        if len(other) < len([p for p in self._params if p.default is Nothing]):
             raise SignatureError()  # TODO test
         # Pad `other` to make it's length same as `self._params`
         other = other + [Nothing] * (len(self._params) - len(other))
