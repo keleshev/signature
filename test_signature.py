@@ -55,3 +55,21 @@ def test_mixed_parameters_vs_positional_arguments():
 
 
 
+
+
+def test_mixed_parameters_vs_mixed_arguments():
+
+    s = Signature('year', 'month', ('day', 1), ('hour', 0))
+
+    if 0:
+        s << Call(*args, **kwargs)
+        s << Call(2013, month=1, day=15)
+        assert list(s) == [2013, 1, 15, 0]
+
+        s(*args, **kwargs)
+        s(2013, month=1, day=15)
+        assert list(s) == [2013, 1, 15, 0]
+
+        args = s(*args, **kwargs)
+        args = s(2013, month=1, day=15)
+        assert list(args) == [2013, 1, 15, 0]
