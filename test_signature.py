@@ -1,6 +1,6 @@
 from pytest import raises
 
-from signature import Signature, SignatureError
+from signature import Signature
 
 
 def test_positional_parameters_vs_positional_arguments():
@@ -13,9 +13,9 @@ def test_positional_parameters_vs_positional_arguments():
     assert args.day   == args[2] == 15
     assert args == (2013, 1, 15)
 
-    with raises(SignatureError):
+    with raises(TypeError):
         signature()
-    with raises(SignatureError):
+    with raises(TypeError):
         signature(2013, 1, 15, 20, 44)
 
 
@@ -27,7 +27,7 @@ def test_keyword_parameters_vs_positional_arguments():
     assert signature(2013) == (2013, 1, 1)
     assert signature() == (1970, 1, 1)
 
-    with raises(SignatureError):
+    with raises(TypeError):
         signature(2013, 1, 15, 20, 44)
 
 
@@ -38,9 +38,9 @@ def test_mixed_parameters_vs_positional_arguments():
     assert signature(2013, 1, 15) == (2013, 1, 15)
     assert signature(2013) == (2013, 1, 1)
 
-    with raises(SignatureError):
+    with raises(TypeError):
         signature()
-    with raises(SignatureError):
+    with raises(TypeError):
         signature(2013, 1, 15, 20, 44)
 
 

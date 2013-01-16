@@ -1,10 +1,6 @@
 from collections import namedtuple
 
 
-class SignatureError(Exception):
-    pass
-
-
 Nothing = object()
 class Param(object):
 
@@ -31,9 +27,9 @@ class Signature(object):
 
     def __call__(self, *args, **kwargs):
         if len(args) > len(self._params):
-            raise SignatureError()  # TODO better error reporting
+            raise TypeError()  # TODO better error reporting
         if len(args) < len([p for p in self._params if p.default is Nothing]):
-            raise SignatureError()  # TODO test
+            raise TypeError()  # TODO test
         # Pad `args` to make it's length same as `self._params`
         args = args + (Nothing,) * (len(self._params) - len(args))
         values = {}
