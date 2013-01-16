@@ -28,18 +28,22 @@ class Signature(object):
     def __call__(self, *args, **kwargs):
         if len(args) > len(self._params):
             raise TypeError()  # TODO better error reporting
-        if len(args) < len([p for p in self._params if p.default is Nothing]):
-            raise TypeError()  # TODO test
-        # Pad `args` to make it's length same as `self._params`
-        args = args + (Nothing,) * (len(self._params) - len(args))
-        values = {}
+        if not set(kwargs) <= set([p.name for p in self._params]):
+            raise TypeError()
+        # See PEP 3102
+        slots = {}
         for param, arg in zip(self._params, args):
-            if arg is Nothing:
-                if param.default is Nothing:
-                    assert not 'reachable'
-                else:
-                    values[param.name] = param.default
+            slots[param.name] = arg
+        for keyword, argument in kwargs.items():
+            if keyword in slots:
+                raise TypeError()
+            for param in [p for p in self._params if p.name not in slots]:
+                if param.name == keyword:
+                    slots[param.name] = kwargs[keyword]
+        for param in [p for p in self._params if p.name not in slots]:
+            if param.default is not Nothing:
+                slots[param.name] = param.default
             else:
-                values[param.name] = arg
+                raise TypeError()
         Arguments = namedtuple('Argument', [p.name for p in self._params])
-        return Arguments(**values)
+        return Arguments(**slots)

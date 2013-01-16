@@ -48,7 +48,9 @@ def test_mixed_parameters_vs_mixed_arguments():
 
     signature = Signature('year', 'month', ('day', 1), ('hour', 0))
 
-    if 0:
-        args = signature(*args, **kwargs)
-        args = signature(2013, month=1, day=15)
-        assert args == (2013, 1, 15, 0)
+    assert signature(     2013,       1,     15) == (2013, 1, 15, 0)
+    assert signature(     2013,       1, day=15) == (2013, 1, 15, 0)
+    assert signature(     2013, month=1, day=15) == (2013, 1, 15, 0)
+    assert signature(year=2013, month=1, day=15) == (2013, 1, 15, 0)
+    with raises(TypeError):
+        signature(year=2013, month=1, day=15, nonexistent=True)
